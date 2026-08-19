@@ -167,6 +167,105 @@ app.get('/api/stats', async (req, res) => {
     }
 });
 
+// --- DISH MANAGEMENT API ROUTES ---
+
+// GET ALL DISHES
+app.get('/api/dishes', async (req, res) => {
+    try {
+        const dishes = await dbAll('SELECT * FROM dishes ORDER BY id DESC');
+        return res.json({ success: true, dishes });
+    } catch (error) {
+        console.error('Error fetching dishes:', error);
+        return res.status(500).json({ success: false, message: 'Failed to fetch dishes from database.' });
+    }
+});
+
+// CREATE A NEW DISH
+app.post('/api/dishes', async (req, res) => {
+    try {
+        const { name, category, price, discount, image, description, is_available } = req.body;
+
+        if (!name || !category || price === undefined || price === null || price === '') {
+            return res.status(400).json({ success: false, message: 'Dish name, category, and price are required.' });
+        }
+
+        const numericPrice = parseFloat(price);
+        const numericDiscount = discount ? parseFloat(discount) : 0;
+        const availableStatus = is_available !== undefined ? (is_available ? 1 : 0) : 1;
+        const imageUrl = image && image.trim() !== '' ? image.trim() : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80';
+
+        const result = await dbRun(
+            `INSERT INTO dishes (name, category, price, discount, image, description, is_available)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [name.trim(), category.toLowerCase().trim(), numericPrice, numericDiscount, imageUrl, description ? description.trim() : '', availableStatus]
+        );
+
+        const newDish = await dbGet('SELECT * FROM dishes WHERE id = ?', [result.lastID]);
+
+        return res.status(201).json({
+            success: true,
+            message: '🎉 Dish created successfully!',
+            dish: newDish
+        });
+    } catch (error) {
+        console.error('Error creating dish:', error);
+        return res.status(500).json({ success: false, message: 'Server error while creating dish.' });
+    }
+});
+
+// UPDATE DISH DETAILS
+app.put('/api/dishes/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, category, price, discount, image, description, is_available } = req.body;
+
+        const existing = await dbGet('SELECT id FROM dishes WHERE id = ?', [id]);
+        if (!existing) {
+            return res.status(404).json({ success: false, message: 'Dish not found.' });
+        }
+
+        const numericPrice = parseFloat(price);
+        const numericDiscount = discount !== undefined ? parseFloat(discount) : 0;
+        const availableStatus = is_available !== undefined ? (is_available ? 1 : 0) : 1;
+        const imageUrl = image && image.trim() !== '' ? image.trim() : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80';
+
+        await dbRun(
+            `UPDATE dishes 
+             SET name = ?, category = ?, price = ?, discount = ?, image = ?, description = ?, is_available = ?
+             WHERE id = ?`,
+            [name.trim(), category.toLowerCase().trim(), numericPrice, numericDiscount, imageUrl, description ? description.trim() : '', availableStatus, id]
+        );
+
+        const updatedDish = await dbGet('SELECT * FROM dishes WHERE id = ?', [id]);
+
+        return res.json({
+            success: true,
+            message: '✅ Dish updated successfully!',
+            dish: updatedDish
+        });
+    } catch (error) {
+        console.error('Error updating dish:', error);
+        return res.status(500).json({ success: false, message: 'Server error while updating dish.' });
+    }
+});
+
+// DELETE DISH
+app.delete('/api/dishes/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const existing = await dbGet('SELECT id FROM dishes WHERE id = ?', [id]);
+        if (!existing) {
+            return res.status(404).json({ success: false, message: 'Dish not found.' });
+        }
+
+        await dbRun('DELETE FROM dishes WHERE id = ?', [id]);
+        return res.json({ success: true, message: '🗑️ Dish deleted successfully!' });
+    } catch (error) {
+        console.error('Error deleting dish:', error);
+        return res.status(500).json({ success: false, message: 'Server error while deleting dish.' });
+    }
+});
+
 // Fallback route for SPA
 app.use((req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));

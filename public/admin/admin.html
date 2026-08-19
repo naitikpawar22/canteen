@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyCanteen Admin | Food & Category Management</title>
+    <meta name="description" content="Admin Dashboard to manage canteen food items, categories, pricing, discounts, and availability.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --primary-glow: rgba(139, 92, 246, 0.4);
+            --secondary: #06b6d4;
+            --accent: #ec4899;
+            --bg-dark: #090d16;
+            --card-bg: rgba(17, 24, 39, 0.85);
+            --input-bg: rgba(15, 23, 42, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-focus: rgba(139, 92, 246, 0.6);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-subtle: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 60px;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 20%, #0f172a 0%, #090d16 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
+        }
+
+        .orb-1 { width: 500px; height: 500px; background: var(--primary); top: -100px; left: -100px; }
+        .orb-2 { width: 450px; height: 450px; background: var(--secondary); bottom: -100px; right: -100px; }
+
+        /* Navbar */
+        .admin-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .admin-badge {
+            background: rgba(236, 72, 153, 0.2);
+            color: var(--accent);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
+            text-transform: uppercase;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .btn-storefront {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-storefront:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 24px;
+        }
+
+        /* Header Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            backdrop-filter: blur(12px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .stat-icon.purple { background: rgba(139, 92, 246, 0.15); color: var(--primary); }
+        .stat-icon.cyan { background: rgba(6, 182, 212, 0.15); color: var(--secondary); }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .stat-icon.pink { background: rgba(236, 72, 153, 0.15); color: var(--accent); }
+
+        .stat-info { display: flex; flex-direction: column; }
+        .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+        .stat-value { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 700; color: #fff; margin-top: 2px; }
+
+        /* Controls Section */
+        .controls-bar {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .search-filter-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-subtle);
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            padding: 11px 14px 11px 40px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .category-select {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 11px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .category-select option {
+            background: #0f172a;
+            color: #fff;
+        }
+
+        .btn-add-dish {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            border: none;
+            color: #fff;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transition: all 0.2s ease;
+        }
+
+        .btn-add-dish:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+        }
+
+        /* Dish Cards Grid */
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .dish-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+
+        .dish-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .dish-img-box {
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+            background: #1e293b;
+        }
+
+        .dish-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .dish-card:hover .dish-img {
+            transform: scale(1.06);
+        }
+
+        .cat-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(8px);
+            color: var(--secondary);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+        }
+
+        .stock-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            backdrop-filter: blur(8px);
+        }
+
+        .stock-badge.in-stock { background: rgba(16, 185, 129, 0.85); color: #fff; }
+        .stock-badge.out-stock { background: rgba(239, 68, 68, 0.85); color: #fff; }
+
+        .dish-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .dish-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .dish-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .final-price {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--success);
+        }
+
+        .original-price {
+            font-size: 14px;
+            color: var(--text-subtle);
+            text-decoration: line-through;
+        }
+
+        .dish-actions {
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 14px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 9px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-edit {
+            background: rgba(139, 92, 246, 0.15);
+            color: #c4b5fd;
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-edit:hover {
+            background: rgba(139, 92, 246, 0.3);
+            color: #fff;
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: #fff;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: linear-gradient(145deg, #111827, #0f172a);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 540px;
+            padding: 32px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            transform: scale(0.92);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .btn-close-modal {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            padding: 11px 14px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .img-preview-box {
+            height: 100px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #1e293b;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed var(--border-color);
+        }
+
+        .img-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 11px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            border: none;
+            color: #fff;
+            padding: 11px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        /* Toast */
+        .toast-box {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--success);
+            padding: 14px 20px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .toast.error { border-left-color: var(--danger); }
+
+        @keyframes slideIn {
+            from { transform: translateX(50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <!-- Admin Navigation Bar -->
+    <nav class="admin-nav">
+        <a href="#" class="brand-box">
+            <div class="brand-icon">
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            <span class="brand-title">MyCanteen <span class="admin-badge">Admin</span></span>
+        </a>
+
+        <div class="nav-actions">
+            <a href="../Home/index.html" class="btn-storefront">
+                <i class="fa-solid fa-store"></i> Student Storefront
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container">
+
+        <!-- Top Header Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fa-solid fa-bowl-food"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Total Dishes</span>
+                    <span class="stat-value" id="statTotalDishes">0</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon cyan">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Categories</span>
+                    <span class="stat-value" id="statCategories">0</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Items In Stock</span>
+                    <span class="stat-value" id="statInStock">0</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon pink">
+                    <i class="fa-solid fa-percent"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Avg. Discount</span>
+                    <span class="stat-value" id="statAvgDiscount">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Bar (Search, Category Filter, Add Dish Button) -->
+        <div class="controls-bar">
+            <div class="search-filter-box">
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search dish name or description...">
+                </div>
+
+                <select id="categoryFilter" class="category-select">
+                    <option value="all">All Categories</option>
+                    <option value="meals">Meals & Thali</option>
+                    <option value="fastfood">Fast Food</option>
+                    <option value="drinks">Drinks & Shakes</option>
+                    <option value="dessert">Desserts</option>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="snacks">Snacks</option>
+                </select>
+            </div>
+
+            <button class="btn-add-dish" id="openAddModalBtn">
+                <i class="fa-solid fa-plus"></i> Add New Dish
+            </button>
+        </div>
+
+        <!-- Dishes Grid -->
+        <div class="dishes-grid" id="dishesGrid">
+            <!-- Dynamically populated dish cards -->
+        </div>
+
+    </div>
+
+    <!-- Add / Edit Dish Modal -->
+    <div class="modal-overlay" id="dishModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Dish</h3>
+                <button class="btn-close-modal" id="closeModalBtn">&times;</button>
+            </div>
+
+            <form class="modal-form" id="dishForm">
+                <input type="hidden" id="dishId">
+
+                <div class="form-group">
+                    <label for="dishName">Dish Name *</label>
+                    <input type="text" id="dishName" placeholder="e.g. Special Paneer Butter Masala" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dishCategory">Category *</label>
+                        <select id="dishCategory" required>
+                            <option value="meals">Meals & Thali</option>
+                            <option value="fastfood">Fast Food</option>
+                            <option value="drinks">Drinks & Shakes</option>
+                            <option value="dessert">Desserts</option>
+                            <option value="breakfast">Breakfast</option>
+                            <option value="snacks">Snacks</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dishPrice">Original Price (₹) *</label>
+                        <input type="number" id="dishPrice" step="0.01" min="0" placeholder="120" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dishDiscount">Discount (%)</label>
+                        <input type="number" id="dishDiscount" step="1" min="0" max="100" placeholder="e.g. 15 (Optional)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Availability</label>
+                        <label class="checkbox-group">
+                            <input type="checkbox" id="dishAvailable" checked>
+                            <span>In Stock for Ordering</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dishImage">Dish Photo URL</label>
+                    <input type="url" id="dishImage" placeholder="https://images.unsplash.com/photo-...">
+                    <div class="img-preview-box">
+                        <img id="imgPreview" class="img-preview" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80" alt="Preview">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dishDescription">Description</label>
+                    <textarea id="dishDescription" rows="3" placeholder="Brief description of ingredients or preparation..."></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn-save" id="saveDishBtn">Save Dish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-box" id="toastBox"></div>
+
+    <script>
+        // State
+        let dishesList = [];
+
+        // Elements
+        const dishesGrid = document.getElementById('dishesGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const dishModal = document.getElementById('dishModal');
+        const openAddModalBtn = document.getElementById('openAddModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelModalBtn = document.getElementById('cancelModalBtn');
+        const dishForm = document.getElementById('dishForm');
+        const modalTitle = document.getElementById('modalTitle');
+        const dishImageInput = document.getElementById('dishImage');
+        const imgPreview = document.getElementById('imgPreview');
+        const toastBox = document.getElementById('toastBox');
+
+        // Stats elements
+        const statTotalDishes = document.getElementById('statTotalDishes');
+        const statCategories = document.getElementById('statCategories');
+        const statInStock = document.getElementById('statInStock');
+        const statAvgDiscount = document.getElementById('statAvgDiscount');
+
+        // Fetch Dishes from API
+        async function fetchDishes() {
+            try {
+                const response = await fetch('/api/dishes');
+                const data = await response.json();
+                if (data.success) {
+                    dishesList = data.dishes;
+                    renderGrid();
+                    updateStats();
+                }
+            } catch (err) {
+                showToast('Failed to load dishes from backend SQLite DB.', true);
+            }
+        }
+
+        // Update Summary Stats
+        function updateStats() {
+            statTotalDishes.textContent = dishesList.length;
+            const uniqueCategories = new Set(dishesList.map(d => d.category));
+            statCategories.textContent = uniqueCategories.size;
+            const inStock = dishesList.filter(d => d.is_available === 1).length;
+            statInStock.textContent = inStock;
+
+            const totalDiscount = dishesList.reduce((acc, curr) => acc + (curr.discount || 0), 0);
+            const avgDiscount = dishesList.length > 0 ? (totalDiscount / dishesList.length).toFixed(0) : 0;
+            statAvgDiscount.textContent = `${avgDiscount}%`;
+        }
+
+        // Render Grid
+        function renderGrid() {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedCat = categoryFilter.value;
+
+            const filtered = dishesList.filter(dish => {
+                const matchesQuery = dish.name.toLowerCase().includes(query) || (dish.description && dish.description.toLowerCase().includes(query));
+                const matchesCategory = selectedCat === 'all' || dish.category === selectedCat;
+                return matchesQuery && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                dishesGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                        <i class="fa-solid fa-utensils" style="font-size: 40px; margin-bottom: 12px; color: var(--text-subtle);"></i>
+                        <h3>No dishes found</h3>
+                        <p style="font-size: 14px; margin-top: 4px;">Try modifying your search or add a new dish to the menu.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            dishesGrid.innerHTML = filtered.map(dish => {
+                const discount = dish.discount || 0;
+                const finalPrice = discount > 0 ? (dish.price * (1 - discount / 100)).toFixed(2) : dish.price.toFixed(2);
+                const isAvailable = dish.is_available === 1;
+
+                return `
+                    <div class="dish-card">
+                        <div class="dish-img-box">
+                            <img src="${dish.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80'}" 
+                                 alt="${dish.name}" class="dish-img" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80'">
+                            <span class="cat-tag">${dish.category}</span>
+                            ${discount > 0 ? `<span class="discount-badge">${discount}% OFF</span>` : ''}
+                            <span class="stock-badge ${isAvailable ? 'in-stock' : 'out-stock'}">
+                                ${isAvailable ? '🟢 In Stock' : '🔴 Out of Stock'}
+                            </span>
+                        </div>
+                        <div class="dish-content">
+                            <div>
+                                <h3 class="dish-title">${dish.name}</h3>
+                                <p class="dish-desc">${dish.description || 'No description provided.'}</p>
+                            </div>
+                            <div>
+                                <div class="price-row">
+                                    <span class="final-price">₹${finalPrice}</span>
+                                    ${discount > 0 ? `<span class="original-price">₹${dish.price}</span>` : ''}
+                                </div>
+                                <div class="dish-actions">
+                                    <button class="btn-action btn-edit" onclick="openEditModal(${dish.id})">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </button>
+                                    <button class="btn-action btn-delete" onclick="deleteDish(${dish.id})">
+                                        <i class="fa-solid fa-trash-can"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Live Image Preview Handler
+        dishImageInput.addEventListener('input', (e) => {
+            const url = e.target.value.trim();
+            imgPreview.src = url !== '' ? url : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80';
+        });
+
+        // Search & Filter Listeners
+        searchInput.addEventListener('input', renderGrid);
+        categoryFilter.addEventListener('change', renderGrid);
+
+        // Modal Open / Close
+        openAddModalBtn.addEventListener('click', () => {
+            modalTitle.textContent = 'Add New Dish';
+            dishForm.reset();
+            document.getElementById('dishId').value = '';
+            document.getElementById('dishAvailable').checked = true;
+            imgPreview.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80';
+            dishModal.classList.add('active');
+        });
+
+        function closeModal() {
+            dishModal.classList.remove('active');
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelModalBtn.addEventListener('click', closeModal);
+
+        // Edit Modal
+        window.openEditModal = function(id) {
+            const dish = dishesList.find(d => d.id === id);
+            if (!dish) return;
+
+            modalTitle.textContent = 'Edit Dish Details';
+            document.getElementById('dishId').value = dish.id;
+            document.getElementById('dishName').value = dish.name;
+            document.getElementById('dishCategory').value = dish.category;
+            document.getElementById('dishPrice').value = dish.price;
+            document.getElementById('dishDiscount').value = dish.discount || 0;
+            document.getElementById('dishImage').value = dish.image || '';
+            document.getElementById('dishDescription').value = dish.description || '';
+            document.getElementById('dishAvailable').checked = dish.is_available === 1;
+
+            imgPreview.src = dish.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80';
+            dishModal.classList.add('active');
+        };
+
+        // Submit Form (Create or Update)
+        dishForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('dishId').value;
+            const name = document.getElementById('dishName').value.trim();
+            const category = document.getElementById('dishCategory').value;
+            const price = parseFloat(document.getElementById('dishPrice').value);
+            const discount = parseFloat(document.getElementById('dishDiscount').value) || 0;
+            const image = document.getElementById('dishImage').value.trim();
+            const description = document.getElementById('dishDescription').value.trim();
+            const is_available = document.getElementById('dishAvailable').checked;
+
+            const payload = { name, category, price, discount, image, description, is_available };
+
+            try {
+                const url = id ? `/api/dishes/${id}` : '/api/dishes';
+                const method = id ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showToast(data.message || 'Dish saved successfully!');
+                    closeModal();
+                    fetchDishes();
+                } else {
+                    showToast(data.message || 'Failed to save dish.', true);
+                }
+            } catch (err) {
+                showToast('Network error saving dish.', true);
+            }
+        });
+
+        // Delete Dish
+        window.deleteDish = async function(id) {
+            if (!confirm('Are you sure you want to delete this dish from the canteen menu?')) return;
+
+            try {
+                const response = await fetch(`/api/dishes/${id}`, { method: 'DELETE' });
+                const data = await response.json();
+                if (data.success) {
+                    showToast(data.message || 'Dish deleted!');
+                    fetchDishes();
+                } else {
+                    showToast(data.message || 'Failed to delete dish.', true);
+                }
+            } catch (err) {
+                showToast('Network error deleting dish.', true);
+            }
+        };
+
+        // Toast Helper
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${isError ? 'error' : ''}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${isError ? 'fa-circle-xmark' : 'fa-circle-check'}"></i>
+                <span>${message}</span>
+            `;
+            toastBox.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+
+        // Init
+        fetchDishes();
+    </script>
+</body>
+
+</html>

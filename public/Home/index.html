@@ -711,18 +711,8 @@
     </div>
 
     <script>
-        // Food Items Dataset
-        const foodItems = [
-            { id: 1, name: "Crispy Cheese Burger", cat: "fastfood", price: 120, rating: 4.8, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80", desc: "Loaded with melted cheddar cheese & fresh lettuce." },
-            { id: 2, name: "Paneer Butter Masala Thali", cat: "meals", price: 180, rating: 4.9, img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=500&q=80", desc: "Served with 3 Butter Naans, Jeera Rice & Gulab Jamun." },
-            { id: 3, name: "Pepperoni Deluxe Pizza", cat: "fastfood", price: 250, rating: 4.7, img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80", desc: "Classic mozzarella crust with spicy herbs." },
-            { id: 4, name: "Cold Coffee with Ice Cream", cat: "drinks", price: 80, rating: 4.9, img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=500&q=80", desc: "Thick brewed espresso topped with vanilla scoop." },
-            { id: 5, name: "Samosa & Mint Chutney (2 Pcs)", cat: "fastfood", price: 40, rating: 4.6, img: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=500&q=80", desc: "Crispy golden pastry stuffed with spicy potato." },
-            { id: 6, name: "Choco Lava Cake", cat: "dessert", price: 90, rating: 5.0, img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=500&q=80", desc: "Gooey warm chocolate center cake." },
-            { id: 7, name: "Masala Dosa with Sambhar", cat: "meals", price: 110, rating: 4.8, img: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=500&q=80", desc: "Crispy crepe filled with tempered potato mash." },
-            { id: 8, name: "Fresh Mango Smoothie", cat: "drinks", price: 75, rating: 4.7, img: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=500&q=80", desc: "Real Alphonso pulp blended with chilled yogurt." }
-        ];
-
+        // Food Items Dataset (Fetched dynamically from SQLite API)
+        let foodItems = [];
         let cart = [];
 
         // DOM elements
@@ -740,6 +730,35 @@
         const userNameDisplay = document.getElementById('userNameDisplay');
         const userAvatarImg = document.getElementById('userAvatarImg');
         const logoutHomeBtn = document.getElementById('logoutHomeBtn');
+
+        // Fetch Dishes from API
+        async function fetchDishesFromAPI() {
+            try {
+                const res = await fetch('/api/dishes');
+                const data = await res.json();
+                if (data.success && data.dishes) {
+                    foodItems = data.dishes.map(d => {
+                        const discount = d.discount || 0;
+                        const calcPrice = discount > 0 ? parseFloat((d.price * (1 - discount / 100)).toFixed(2)) : parseFloat(d.price);
+                        return {
+                            id: d.id,
+                            name: d.name,
+                            cat: d.category,
+                            originalPrice: d.price,
+                            price: calcPrice,
+                            discount: discount,
+                            rating: 4.8,
+                            img: d.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80',
+                            desc: d.description || 'Freshly prepared canteen item.',
+                            isAvailable: d.is_available === 1
+                        };
+                    });
+                    renderFoodGrid(foodItems);
+                }
+            } catch (e) {
+                console.error('Error loading dynamic dishes:', e);
+            }
+        }
 
         // Check user session
         const token = localStorage.getItem('canteen_token');
@@ -761,33 +780,53 @@
 
         // Render Food Grid
         function renderFoodGrid(items) {
-            foodGrid.innerHTML = items.map(item => `
-                <div class="food-card">
-                    <div class="food-img-wrapper">
-                        <img src="${item.img}" alt="${item.name}" class="food-img">
-                        <span class="rating-tag"><i class="fa-solid fa-star"></i> ${item.rating}</span>
+            if (!items || items.length === 0) {
+                foodGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                        <i class="fa-solid fa-utensils" style="font-size: 40px; margin-bottom: 12px; color: var(--text-subtle);"></i>
+                        <h3>No dishes available in this category</h3>
                     </div>
-                    <div class="food-details">
-                        <div>
-                            <h3 class="food-title">${item.name}</h3>
-                            <p class="food-desc">${item.desc}</p>
-                        </div>
-                        <div class="food-footer">
-                            <span class="price-tag">₹${item.price}</span>
-                            <button class="btn-add-cart" onclick="addToCart(${item.id})">
-                                <i class="fa-solid fa-plus"></i> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+                `;
+                return;
+            }
 
-        renderFoodGrid(foodItems);
+            foodGrid.innerHTML = items.map(item => {
+                const hasDiscount = item.discount > 0;
+                return `
+                    <div class="food-card ${!item.isAvailable ? 'out-of-stock-card' : ''}">
+                        <div class="food-img-wrapper">
+                            <img src="${item.img}" alt="${item.name}" class="food-img" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80'">
+                            <span class="rating-tag"><i class="fa-solid fa-star"></i> ${item.rating}</span>
+                            ${hasDiscount ? `<span style="position:absolute; top:12px; left:12px; background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; padding:3px 8px; border-radius:12px; font-size:11px; font-weight:800;">${item.discount}% OFF</span>` : ''}
+                        </div>
+                        <div class="food-details">
+                            <div>
+                                <h3 class="food-title">${item.name}</h3>
+                                <p class="food-desc">${item.desc}</p>
+                            </div>
+                            <div class="food-footer">
+                                <div style="display:flex; flex-direction:column;">
+                                    <span class="price-tag">₹${item.price}</span>
+                                    ${hasDiscount ? `<span style="font-size:12px; color:var(--text-muted); text-decoration:line-through;">₹${item.originalPrice}</span>` : ''}
+                                </div>
+                                ${item.isAvailable ? `
+                                    <button class="btn-add-cart" onclick="addToCart(${item.id})">
+                                        <i class="fa-solid fa-plus"></i> Add
+                                    </button>
+                                ` : `
+                                    <span style="font-size:12px; color:#ef4444; font-weight:700; background:rgba(239,68,68,0.15); padding:4px 8px; border-radius:6px;">Out of Stock</span>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
         // Add to Cart
         window.addToCart = function(id) {
             const item = foodItems.find(f => f.id === id);
+            if (!item || !item.isAvailable) return;
             const existing = cart.find(c => c.id === id);
             if (existing) {
                 existing.qty++;
@@ -821,7 +860,7 @@
                 <div class="cart-item">
                     <div class="item-info">
                         <h4>${item.name}</h4>
-                        <span>₹${item.price * item.qty}</span>
+                        <span>₹${(item.price * item.qty).toFixed(2)}</span>
                     </div>
                     <div class="qty-controls">
                         <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
@@ -887,6 +926,9 @@
             const q = e.target.value.toLowerCase().trim();
             renderFoodGrid(foodItems.filter(i => i.name.toLowerCase().includes(q) || i.desc.toLowerCase().includes(q)));
         });
+
+        // Initialize API call
+        fetchDishesFromAPI();
     </script>
 </body>
 </html>
