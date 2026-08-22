@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { initDB, dbGet, dbRun } = require('./db');
+const { initDB, dbGet, dbRun, dbAll } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,7 +11,8 @@ const JWT_SECRET = process.env.JWT_SECRET || 'mycanteen_secure_jwt_secret_key_20
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // JWT Verification Middleware
@@ -157,7 +158,32 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
     }
 });
 
-// 4. GET SYSTEM STATS (Total SQLite user count)
+// 4. ADMIN LOGIN (PASSWORD: admin@123)
+app.post('/api/auth/admin-login', async (req, res) => {
+    try {
+        const { password } = req.body;
+
+        if (!password) {
+            return res.status(400).json({ success: false, message: 'Admin password is required.' });
+        }
+
+        if (password === 'admin@123') {
+            const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '1d' });
+            return res.json({
+                success: true,
+                message: '🔓 Admin access granted!',
+                token
+            });
+        } else {
+            return res.status(401).json({ success: false, message: 'Incorrect Admin Password!' });
+        }
+    } catch (error) {
+        console.error('Admin login error:', error);
+        return res.status(500).json({ success: false, message: 'Server error during admin authentication.' });
+    }
+});
+
+// 5. GET SYSTEM STATS (Total SQLite user count)
 app.get('/api/stats', async (req, res) => {
     try {
         const row = await dbGet('SELECT COUNT(*) AS total FROM users');
@@ -263,6 +289,112 @@ app.delete('/api/dishes/:id', async (req, res) => {
     } catch (error) {
         console.error('Error deleting dish:', error);
         return res.status(500).json({ success: false, message: 'Server error while deleting dish.' });
+    }
+});
+
+// --- ORDERS API ROUTES ---
+
+// 1. PLACE NEW ORDER (STUDENT)
+app.post('/api/orders', async (req, res) => {
+    try {
+        const { user_name, user_email, items, total_amount, payment_method } = req.body;
+
+        if (!items || !items.length || !total_amount) {
+            return res.status(400).json({ success: false, message: 'Cart items and total amount are required.' });
+        }
+
+        const name = user_name || 'Student Customer';
+        const email = user_email || 'student@canteen.com';
+        const payMethod = payment_method || 'Pay Now (PhonePe)';
+        const payStatus = payMethod.includes('Pay Now') ? 'Paid' : 'Pending';
+        const itemsJson = JSON.stringify(items);
+
+        const result = await dbRun(
+            `INSERT INTO orders (user_name, user_email, items, total_amount, payment_method, payment_status, order_status)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [name, email, itemsJson, parseFloat(total_amount), payMethod, payStatus, 'Preparing']
+        );
+
+        const newOrder = await dbGet('SELECT * FROM orders WHERE id = ?', [result.lastID]);
+
+        return res.status(201).json({
+            success: true,
+            message: '🎉 Order placed successfully!',
+            order: newOrder
+        });
+
+    } catch (error) {
+        console.error('Error placing order:', error);
+        return res.status(500).json({ success: false, message: 'Server error while placing order.' });
+    }
+});
+
+// 2. GET ALL ORDERS (ADMIN)
+app.get('/api/orders', async (req, res) => {
+    try {
+        const orders = await dbAll('SELECT * FROM orders ORDER BY id DESC');
+        const formattedOrders = orders.map(order => {
+            let parsedItems = [];
+            try {
+                parsedItems = JSON.parse(order.items);
+            } catch (e) {
+                parsedItems = [];
+            }
+            return {
+                ...order,
+                items: parsedItems
+            };
+        });
+        return res.json({ success: true, orders: formattedOrders });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        return res.status(500).json({ success: false, message: 'Server error fetching orders.' });
+    }
+});
+
+// 2.1 GET ORDERS FOR SPECIFIC STUDENT
+app.get('/api/orders/user/:email', async (req, res) => {
+    try {
+        const { email } = req.params;
+        const orders = await dbAll('SELECT * FROM orders WHERE user_email = ? ORDER BY id DESC', [email]);
+        const formattedOrders = orders.map(order => {
+            let parsedItems = [];
+            try { parsedItems = JSON.parse(order.items); } catch(e) {}
+            return { ...order, items: parsedItems };
+        });
+        return res.json({ success: true, orders: formattedOrders });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Server error fetching student orders.' });
+    }
+});
+
+// 3. UPDATE ORDER STATUS (ADMIN)
+app.put('/api/orders/:id/status', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { order_status, payment_status } = req.body;
+
+        const existing = await dbGet('SELECT * FROM orders WHERE id = ?', [id]);
+        if (!existing) {
+            return res.status(404).json({ success: false, message: 'Order not found.' });
+        }
+
+        const newOrderStatus = order_status || existing.order_status;
+        const newPaymentStatus = payment_status || existing.payment_status;
+
+        await dbRun(
+            'UPDATE orders SET order_status = ?, payment_status = ? WHERE id = ?',
+            [newOrderStatus, newPaymentStatus, id]
+        );
+
+        return res.json({
+            success: true,
+            message: `Order #${id} updated to ${newOrderStatus}!`
+        });
+
+    } catch (error) {
+        console.error('Error updating order:', error);
+        return res.status(500).json({ success: false, message: 'Server error updating order.' });
     }
 });
 

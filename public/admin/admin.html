@@ -17,21 +17,21 @@
 
     <style>
         :root {
-            --primary: #8b5cf6;
-            --primary-hover: #7c3aed;
-            --primary-glow: rgba(139, 92, 246, 0.4);
-            --secondary: #06b6d4;
-            --accent: #ec4899;
-            --bg-dark: #090d16;
-            --card-bg: rgba(17, 24, 39, 0.85);
-            --input-bg: rgba(15, 23, 42, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --border-focus: rgba(139, 92, 246, 0.6);
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --text-subtle: #6b7280;
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --primary-glow: rgba(124, 58, 237, 0.2);
+            --secondary: #0284c7;
+            --accent: #e11d48;
+            --bg-dark: #f8fafc;
+            --card-bg: #ffffff;
+            --input-bg: #ffffff;
+            --border-color: rgba(226, 232, 240, 0.9);
+            --border-focus: rgba(124, 58, 237, 0.6);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-subtle: #64748b;
             --success: #10b981;
-            --warning: #f59e0b;
+            --warning: #d97706;
             --danger: #ef4444;
             --radius-md: 14px;
             --radius-lg: 20px;
@@ -58,31 +58,32 @@
             inset: 0;
             z-index: -1;
             overflow: hidden;
-            background: radial-gradient(circle at 50% 20%, #0f172a 0%, #090d16 100%);
+            background: radial-gradient(circle at 50% 20%, #f1f5f9 0%, #e2e8f0 100%);
         }
 
         .orb {
             position: absolute;
             border-radius: 50%;
             filter: blur(120px);
-            opacity: 0.35;
+            opacity: 0.25;
         }
 
-        .orb-1 { width: 500px; height: 500px; background: var(--primary); top: -100px; left: -100px; }
-        .orb-2 { width: 450px; height: 450px; background: var(--secondary); bottom: -100px; right: -100px; }
+        .orb-1 { width: 500px; height: 500px; background: #ddd6fe; top: -100px; left: -100px; }
+        .orb-2 { width: 450px; height: 450px; background: #bae6fd; bottom: -100px; right: -100px; }
 
         /* Navbar */
         .admin-nav {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(9, 13, 22, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-color);
             padding: 16px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
 
         .brand-box {
@@ -102,20 +103,20 @@
             justify-content: center;
             font-size: 20px;
             color: #fff;
-            box-shadow: 0 0 15px var(--primary-glow);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
         }
 
         .brand-title {
             font-family: 'Outfit', sans-serif;
             font-size: 22px;
-            font-weight: 700;
-            color: #fff;
+            font-weight: 800;
+            color: #0f172a;
         }
 
         .admin-badge {
-            background: rgba(236, 72, 153, 0.2);
+            background: rgba(225, 29, 72, 0.1);
             color: var(--accent);
-            border: 1px solid rgba(236, 72, 153, 0.3);
+            border: 1px solid rgba(225, 29, 72, 0.2);
             font-size: 11px;
             font-weight: 700;
             padding: 3px 8px;
@@ -134,21 +135,21 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-color);
-            color: #fff;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #334155;
             padding: 10px 18px;
             border-radius: 10px;
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
 
         .btn-storefront:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--secondary);
-            color: var(--secondary);
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         /* Container */
@@ -174,7 +175,7 @@
             display: flex;
             align-items: center;
             gap: 18px;
-            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
         }
 
         .stat-icon {
@@ -187,14 +188,14 @@
             font-size: 22px;
         }
 
-        .stat-icon.purple { background: rgba(139, 92, 246, 0.15); color: var(--primary); }
-        .stat-icon.cyan { background: rgba(6, 182, 212, 0.15); color: var(--secondary); }
-        .stat-icon.green { background: rgba(16, 185, 129, 0.15); color: var(--success); }
-        .stat-icon.pink { background: rgba(236, 72, 153, 0.15); color: var(--accent); }
+        .stat-icon.purple { background: rgba(124, 58, 237, 0.1); color: var(--primary); }
+        .stat-icon.cyan { background: rgba(2, 132, 199, 0.1); color: var(--secondary); }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .stat-icon.pink { background: rgba(225, 29, 72, 0.1); color: var(--accent); }
 
         .stat-info { display: flex; flex-direction: column; }
-        .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
-        .stat-value { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 700; color: #fff; margin-top: 2px; }
+        .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+        .stat-value { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 800; color: #0f172a; margin-top: 2px; }
 
         /* Controls Section */
         .controls-bar {
@@ -233,11 +234,11 @@
 
         .search-input {
             width: 100%;
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
             padding: 11px 14px 11px 40px;
             border-radius: 10px;
-            color: #fff;
+            color: #0f172a;
             font-size: 14px;
             outline: none;
             transition: all 0.2s;
@@ -249,9 +250,9 @@
         }
 
         .category-select {
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: #fff;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
             padding: 11px 16px;
             border-radius: 10px;
             font-size: 14px;
@@ -260,8 +261,8 @@
         }
 
         .category-select option {
-            background: #0f172a;
-            color: #fff;
+            background: #ffffff;
+            color: #0f172a;
         }
 
         .btn-add-dish {
@@ -276,13 +277,13 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px var(--primary-glow);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
             transition: all 0.2s ease;
         }
 
         .btn-add-dish:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
         }
 
         /* Dish Cards Grid */
@@ -301,19 +302,20 @@
             flex-direction: column;
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
         }
 
         .dish-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 92, 246, 0.2);
-            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 20px 35px -5px rgba(124, 58, 237, 0.15);
+            border-color: rgba(124, 58, 237, 0.4);
         }
 
         .dish-img-box {
             height: 180px;
             position: relative;
             overflow: hidden;
-            background: #1e293b;
+            background: #f1f5f9;
         }
 
         .dish-img {
@@ -331,10 +333,10 @@
             position: absolute;
             top: 12px;
             left: 12px;
-            background: rgba(9, 13, 22, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(8px);
             color: var(--secondary);
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(2, 132, 199, 0.3);
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 11px;
@@ -352,7 +354,7 @@
             border-radius: 20px;
             font-size: 11px;
             font-weight: 800;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
         }
 
         .stock-badge {
@@ -363,11 +365,10 @@
             border-radius: 6px;
             font-size: 11px;
             font-weight: 700;
-            backdrop-filter: blur(8px);
         }
 
-        .stock-badge.in-stock { background: rgba(16, 185, 129, 0.85); color: #fff; }
-        .stock-badge.out-stock { background: rgba(239, 68, 68, 0.85); color: #fff; }
+        .stock-badge.in-stock { background: rgba(16, 185, 129, 0.9); color: #fff; }
+        .stock-badge.out-stock { background: rgba(239, 68, 68, 0.9); color: #fff; }
 
         .dish-content {
             padding: 20px;
@@ -380,8 +381,8 @@
         .dish-title {
             font-family: 'Outfit', sans-serif;
             font-size: 18px;
-            font-weight: 700;
-            color: #fff;
+            font-weight: 800;
+            color: #0f172a;
             margin-bottom: 6px;
         }
 
@@ -440,13 +441,13 @@
         }
 
         .btn-edit {
-            background: rgba(139, 92, 246, 0.15);
-            color: #c4b5fd;
-            border-color: rgba(139, 92, 246, 0.3);
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            border-color: rgba(124, 58, 237, 0.25);
         }
 
         .btn-edit:hover {
-            background: rgba(139, 92, 246, 0.3);
+            background: rgba(124, 58, 237, 0.2);
             color: #fff;
         }
 
@@ -465,8 +466,8 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(9, 13, 22, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             display: flex;
             align-items: center;
@@ -483,15 +484,16 @@
         }
 
         .modal-card {
-            background: linear-gradient(145deg, #111827, #0f172a);
+            background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
             width: 100%;
             max-width: 540px;
             padding: 32px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
             transform: scale(0.92);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #0f172a;
         }
 
         .modal-overlay.active .modal-card {
@@ -510,8 +512,8 @@
         .modal-title {
             font-family: 'Outfit', sans-serif;
             font-size: 22px;
-            font-weight: 700;
-            color: #fff;
+            font-weight: 800;
+            color: #0f172a;
         }
 
         .btn-close-modal {
@@ -542,18 +544,18 @@
 
         .form-group label {
             font-size: 13px;
-            font-weight: 600;
-            color: var(--text-main);
+            font-weight: 700;
+            color: #0f172a;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
             padding: 11px 14px;
             border-radius: 10px;
-            color: #fff;
+            color: #0f172a;
             font-size: 14px;
             outline: none;
             transition: all 0.2s ease;
@@ -676,82 +678,174 @@
             <a href="../Home/index.html" class="btn-storefront">
                 <i class="fa-solid fa-store"></i> Student Storefront
             </a>
+            <button class="btn-storefront" id="adminLogoutBtn" style="border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; cursor: pointer;">
+                <i class="fa-solid fa-lock"></i> Lock Admin
+            </button>
         </div>
     </nav>
 
     <!-- Main Content Container -->
     <div class="container">
 
-        <!-- Top Header Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon purple">
-                    <i class="fa-solid fa-bowl-food"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Total Dishes</span>
-                    <span class="stat-value" id="statTotalDishes">0</span>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon cyan">
-                    <i class="fa-solid fa-layer-group"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Categories</span>
-                    <span class="stat-value" id="statCategories">0</span>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon green">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Items In Stock</span>
-                    <span class="stat-value" id="statInStock">0</span>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon pink">
-                    <i class="fa-solid fa-percent"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Avg. Discount</span>
-                    <span class="stat-value" id="statAvgDiscount">0%</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Controls Bar (Search, Category Filter, Add Dish Button) -->
-        <div class="controls-bar">
-            <div class="search-filter-box">
-                <div class="search-input-wrapper">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Search dish name or description...">
-                </div>
-
-                <select id="categoryFilter" class="category-select">
-                    <option value="all">All Categories</option>
-                    <option value="meals">Meals & Thali</option>
-                    <option value="fastfood">Fast Food</option>
-                    <option value="drinks">Drinks & Shakes</option>
-                    <option value="dessert">Desserts</option>
-                    <option value="breakfast">Breakfast</option>
-                    <option value="snacks">Snacks</option>
-                </select>
-            </div>
-
-            <button class="btn-add-dish" id="openAddModalBtn">
-                <i class="fa-solid fa-plus"></i> Add New Dish
+        <!-- Admin View Switcher Tabs -->
+        <div style="display: flex; gap: 14px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
+            <button type="button" id="tabMenuBtn" onclick="switchAdminView('menu')" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; border: none; padding: 11px 22px; border-radius: 30px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);">
+                <i class="fa-solid fa-utensils"></i> Food Menu & Categories
+            </button>
+            <button type="button" id="tabOrdersBtn" onclick="switchAdminView('orders')" style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--border-color); padding: 11px 22px; border-radius: 30px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s;">
+                <i class="fa-solid fa-receipt"></i> Live Student Orders
+                <span id="liveOrdersBadge" style="background: #ef4444; color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 800;">0</span>
             </button>
         </div>
 
-        <!-- Dishes Grid -->
-        <div class="dishes-grid" id="dishesGrid">
-            <!-- Dynamically populated dish cards -->
+        <!-- ================= MENU SECTION ================= -->
+        <div id="menuSectionView">
+            <!-- Top Header Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fa-solid fa-bowl-food"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Dishes</span>
+                        <span class="stat-value" id="statTotalDishes">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon cyan">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Categories</span>
+                        <span class="stat-value" id="statCategories">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Items In Stock</span>
+                        <span class="stat-value" id="statInStock">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon pink">
+                        <i class="fa-solid fa-percent"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Avg. Discount</span>
+                        <span class="stat-value" id="statAvgDiscount">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Bar (Search, Category Filter, Add Dish Button) -->
+            <div class="controls-bar">
+                <div class="search-filter-box">
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search dish name or description...">
+                    </div>
+
+                    <select id="categoryFilter" class="category-select">
+                        <option value="all">All Categories</option>
+                        <option value="meals">Meals & Thali</option>
+                        <option value="fastfood">Fast Food</option>
+                        <option value="drinks">Drinks & Shakes</option>
+                        <option value="dessert">Desserts</option>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="snacks">Snacks</option>
+                    </select>
+                </div>
+
+                <button class="btn-add-dish" id="openAddModalBtn">
+                    <i class="fa-solid fa-plus"></i> Add New Dish
+                </button>
+            </div>
+
+            <!-- Dishes Grid -->
+            <div class="dishes-grid" id="dishesGrid">
+                <!-- Dynamically populated dish cards -->
+            </div>
+        </div>
+
+        <!-- ================= LIVE ORDERS SECTION ================= -->
+        <div id="ordersSectionView" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Student Orders</span>
+                        <span class="stat-value" id="statTotalOrders">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon pink">
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Pending Cash Orders</span>
+                        <span class="stat-value" id="statPendingCashOrders">0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Revenue</span>
+                        <span class="stat-value" id="statTotalRevenue">₹0</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon cyan">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Preparing Queue</span>
+                        <span class="stat-value" id="statPreparingQueue">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-bar" style="margin-bottom: 24px;">
+                <div class="search-filter-box" style="flex: 1;">
+                    <div class="search-input-wrapper" style="flex: 1;">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="orderSearchInput" class="search-input" placeholder="Search student name, email, or order ID..." oninput="renderOrdersGrid()">
+                    </div>
+
+                    <select id="orderPaymentFilter" class="category-select" onchange="renderOrdersGrid()">
+                        <option value="all">All Payment Types</option>
+                        <option value="Pay Now">Paid Online (PhonePe)</option>
+                        <option value="Pay Later">Pay Later (Counter Cash)</option>
+                    </select>
+
+                    <select id="orderStatusFilter" class="category-select" onchange="renderOrdersGrid()">
+                        <option value="all">All Order Statuses</option>
+                        <option value="Preparing">Preparing</option>
+                        <option value="Ready">Ready for Pickup</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <button class="btn-add-dish" onclick="fetchOrders()" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); color: #fff;">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh Orders
+                </button>
+            </div>
+
+            <div id="ordersGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px;">
+                <!-- Dynamically populated order cards -->
+            </div>
         </div>
 
     </div>
@@ -807,8 +901,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="dishImage">Dish Photo URL</label>
-                    <input type="url" id="dishImage" placeholder="https://images.unsplash.com/photo-...">
+                    <label>Dish Photo (URL or Local File Upload)</label>
+                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
+                        <input type="text" id="dishImage" placeholder="Paste Image URL (https://...) or upload file ->" style="flex: 1;">
+                        <label for="dishFileInput" class="btn-cancel" style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; padding: 11px 14px; margin: 0; background: rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.4); color: #c4b5fd; white-space: nowrap;">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Choose Photo
+                            <input type="file" id="dishFileInput" accept="image/*" style="display: none;">
+                        </label>
+                    </div>
                     <div class="img-preview-box">
                         <img id="imgPreview" class="img-preview" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80" alt="Preview">
                     </div>
@@ -827,12 +927,321 @@
         </div>
     </div>
 
+    <!-- Admin Security Lock Overlay -->
+    <div class="modal-overlay active" id="adminAuthModal" style="z-index: 9999;">
+        <div class="modal-card" style="max-width: 440px; text-align: center;">
+            <div class="brand-icon" style="margin: 0 auto 16px auto; width: 56px; height: 56px; font-size: 26px; background: linear-gradient(135deg, var(--accent), var(--primary));">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h2 class="modal-title" style="font-size: 24px; margin-bottom: 6px;">Admin Security Portal</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Please enter your secret master password to access canteen administration.</p>
+
+            <form id="adminLoginForm" style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="form-group" style="text-align: left;">
+                    <label for="adminPasswordInput">Admin Password</label>
+                    <div style="position: relative;">
+                        <input type="password" id="adminPasswordInput" placeholder="Enter admin password" required autocomplete="current-password" style="width: 100%; padding-right: 40px;">
+                        <button type="button" id="toggleAdminPass" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                    <span id="adminPassError" style="color: var(--danger); font-size: 12px; display: none; margin-top: 4px;"></span>
+                </div>
+
+                <button type="submit" class="btn-save" id="adminLoginSubmitBtn" style="width: 100%; padding: 13px; font-size: 15px; margin-top: 6px; background: linear-gradient(135deg, var(--accent), var(--primary)); border: none; cursor: pointer;">
+                    <i class="fa-solid fa-key"></i> Unlock Admin Panel
+                </button>
+            </form>
+
+            <div style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                <a href="../index.html" style="color: var(--text-muted); text-decoration: none; font-size: 13px;">
+                    <i class="fa-solid fa-arrow-left"></i> Return to Main Login Page
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notifications Container -->
     <div class="toast-box" id="toastBox"></div>
 
     <script>
         // State
         let dishesList = [];
+        let ordersList = [];
+
+        // Admin View Switcher Function
+        window.switchAdminView = function(view) {
+            const menuView = document.getElementById('menuSectionView');
+            const ordersView = document.getElementById('ordersSectionView');
+            const tabMenuBtn = document.getElementById('tabMenuBtn');
+            const tabOrdersBtn = document.getElementById('tabOrdersBtn');
+
+            if (view === 'orders') {
+                menuView.style.display = 'none';
+                ordersView.style.display = 'block';
+
+                tabOrdersBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--accent))';
+                tabOrdersBtn.style.color = '#fff';
+                tabOrdersBtn.style.border = 'none';
+                tabOrdersBtn.style.boxShadow = '0 4px 15px rgba(139, 92, 246, 0.4)';
+
+                tabMenuBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+                tabMenuBtn.style.color = 'var(--text-muted)';
+                tabMenuBtn.style.border = '1px solid var(--border-color)';
+                tabMenuBtn.style.boxShadow = 'none';
+
+                fetchOrders();
+            } else {
+                ordersView.style.display = 'none';
+                menuView.style.display = 'block';
+
+                tabMenuBtn.style.background = 'linear-gradient(135deg, var(--primary), var(--accent))';
+                tabMenuBtn.style.color = '#fff';
+                tabMenuBtn.style.border = 'none';
+                tabMenuBtn.style.boxShadow = '0 4px 15px rgba(139, 92, 246, 0.4)';
+
+                tabOrdersBtn.style.background = 'rgba(255, 255, 255, 0.05)';
+                tabOrdersBtn.style.color = 'var(--text-muted)';
+                tabOrdersBtn.style.border = '1px solid var(--border-color)';
+                tabOrdersBtn.style.boxShadow = 'none';
+            }
+        };
+
+        // Fetch Orders API
+        async function fetchOrders() {
+            try {
+                const response = await fetch('/api/orders');
+                const data = await response.json();
+                if (data.success) {
+                    ordersList = data.orders;
+                    renderOrdersGrid();
+                    updateOrderStats();
+                }
+            } catch (err) {
+                showToast('Failed to fetch orders from server.', true);
+            }
+        }
+
+        // Update Orders Summary Stats
+        function updateOrderStats() {
+            const totalOrders = ordersList.length;
+            document.getElementById('statTotalOrders').textContent = totalOrders;
+            document.getElementById('liveOrdersBadge').textContent = totalOrders;
+
+            const pendingCash = ordersList.filter(o => o.payment_status === 'Pending').length;
+            document.getElementById('statPendingCashOrders').textContent = pendingCash;
+
+            const revenue = ordersList
+                .filter(o => o.payment_status === 'Paid')
+                .reduce((acc, curr) => acc + (curr.total_amount || 0), 0);
+            document.getElementById('statTotalRevenue').textContent = `₹${revenue.toFixed(0)}`;
+
+            const preparing = ordersList.filter(o => o.order_status === 'Preparing').length;
+            document.getElementById('statPreparingQueue').textContent = preparing;
+        }
+
+        // Render Orders Grid
+        window.renderOrdersGrid = function() {
+            const query = (document.getElementById('orderSearchInput')?.value || '').toLowerCase().trim();
+            const payFilter = document.getElementById('orderPaymentFilter')?.value || 'all';
+            const statusFilter = document.getElementById('orderStatusFilter')?.value || 'all';
+            const ordersGrid = document.getElementById('ordersGrid');
+
+            if (!ordersGrid) return;
+
+            const filtered = ordersList.filter(order => {
+                const matchesQuery = (order.user_name || '').toLowerCase().includes(query) ||
+                                     (order.user_email && order.user_email.toLowerCase().includes(query)) ||
+                                     String(order.id).includes(query);
+                const matchesPay = payFilter === 'all' || (order.payment_method || '').includes(payFilter);
+                const matchesStatus = statusFilter === 'all' || order.order_status === statusFilter;
+                return matchesQuery && matchesPay && matchesStatus;
+            });
+
+            if (filtered.length === 0) {
+                ordersGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                        <i class="fa-solid fa-receipt" style="font-size: 40px; margin-bottom: 12px; color: var(--text-subtle);"></i>
+                        <h3>No student orders found</h3>
+                        <p style="font-size: 14px; margin-top: 4px;">Orders placed by students will show up here in real time.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            ordersGrid.innerHTML = filtered.map(order => {
+                const isPaid = order.payment_status === 'Paid';
+                const itemsList = order.items || [];
+                const formattedDate = order.created_at ? new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : 'Just now';
+
+                return `
+                    <div class="dish-card" style="display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--border-color); background: #ffffff;">
+                        <div style="padding: 20px; border-bottom: 1px solid #e2e8f0;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                <div>
+                                    <span style="font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: 0.5px;">ORDER #${order.id}</span>
+                                    <h3 style="font-size: 18px; color: #0f172a; font-weight: 800; margin-top: 2px;"><i class="fa-solid fa-user-graduate" style="color: var(--primary);"></i> ${order.user_name}</h3>
+                                    <span style="font-size: 12px; color: var(--text-muted); font-weight: 500;">${order.user_email || 'student@canteen.com'}</span>
+                                </div>
+                                <span style="font-size: 12px; color: var(--text-subtle); font-weight: 600;">${formattedDate}</span>
+                            </div>
+
+                            <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                                <span class="stock-badge ${isPaid ? 'in-stock' : 'out-stock'}" style="font-size: 12px;">
+                                    ${isPaid ? '💳 Paid (PhonePe)' : '💵 Pay Counter Cash (Pending)'}
+                                </span>
+                                <span class="cat-tag" style="background: rgba(124, 58, 237, 0.1); color: var(--primary); font-size: 11px; font-weight: 800; border: 1px solid rgba(124, 58, 237, 0.25);">
+                                    Status: ${order.order_status}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div style="padding: 16px 20px; flex: 1;">
+                            <h4 style="font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Ordered Food Items:</h4>
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                ${itemsList.map(item => `
+                                    <div style="display: flex; justify-content: space-between; font-size: 13px; color: #0f172a; background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 10px; border-radius: 8px; font-weight: 600;">
+                                        <span><strong style="color: var(--primary);">${item.qty}x</strong> ${item.name}</span>
+                                        <span style="font-weight: 800; color: var(--success);">₹${((item.price || 0) * (item.qty || 1)).toFixed(2)}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div style="padding: 16px 20px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 13px; color: var(--text-muted); font-weight: 700;">Total Bill:</span>
+                                <span style="font-size: 18px; font-weight: 800; color: var(--success);">₹${(order.total_amount || 0).toFixed(2)}</span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                ${order.order_status === 'Preparing' ? `
+                                    <button onclick="updateOrderStatus(${order.id}, 'Ready', '${order.payment_status}')" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #047857; padding: 8px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 12px; transition: 0.2s;">
+                                        <i class="fa-solid fa-bell"></i> Mark Ready
+                                    </button>
+                                ` : `
+                                    <button onclick="updateOrderStatus(${order.id}, 'Completed', '${order.payment_status}')" style="background: rgba(124, 58, 237, 0.12); border: 1px solid var(--primary); color: var(--primary); padding: 8px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 12px; transition: 0.2s;">
+                                        <i class="fa-solid fa-circle-check"></i> Complete
+                                    </button>
+                                `}
+
+                                ${!isPaid ? `
+                                    <button onclick="updateOrderStatus(${order.id}, '${order.order_status}', 'Paid')" style="background: rgba(217, 119, 6, 0.15); border: 1px solid #d97706; color: #b45309; padding: 8px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 12px; transition: 0.2s;">
+                                        <i class="fa-solid fa-coins"></i> Mark Paid
+                                    </button>
+                                ` : `
+                                    <button onclick="updateOrderStatus(${order.id}, 'Cancelled', '${order.payment_status}')" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239,68,68,0.4); color: #dc2626; padding: 8px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 12px; transition: 0.2s;">
+                                        <i class="fa-solid fa-ban"></i> Cancel
+                                    </button>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        // Update Order Status Handler
+        window.updateOrderStatus = async function(id, orderStatus, paymentStatus) {
+            try {
+                const response = await fetch(`/api/orders/${id}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_status: orderStatus, payment_status: paymentStatus })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showToast(data.message || `Order #${id} updated!`);
+                    fetchOrders();
+                } else {
+                    showToast(data.message || 'Failed to update order.', true);
+                }
+            } catch (err) {
+                showToast('Network error updating order.', true);
+            }
+        };
+
+        // Admin Auth Elements
+        const adminAuthModal = document.getElementById('adminAuthModal');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const adminPasswordInput = document.getElementById('adminPasswordInput');
+        const toggleAdminPass = document.getElementById('toggleAdminPass');
+        const adminPassError = document.getElementById('adminPassError');
+        const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+
+        // Check Admin Auth Status
+        function checkAdminAuth() {
+            const isAuth = sessionStorage.getItem('admin_authenticated') === 'true' || localStorage.getItem('admin_token');
+            if (isAuth) {
+                adminAuthModal.classList.remove('active');
+                fetchDishes();
+                fetchOrders();
+                setInterval(fetchOrders, 4000);
+            } else {
+                adminAuthModal.classList.add('active');
+            }
+        }
+
+        // Toggle Admin Password Visibility
+        toggleAdminPass.addEventListener('click', () => {
+            const isPass = adminPasswordInput.type === 'password';
+            adminPasswordInput.type = isPass ? 'text' : 'password';
+            toggleAdminPass.querySelector('i').className = isPass ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+        });
+
+        // Admin Login Form Submit Handler
+        adminLoginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            adminPassError.style.display = 'none';
+
+            const password = adminPasswordInput.value.trim();
+            if (!password) return;
+
+            try {
+                const response = await fetch('/api/auth/admin-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    sessionStorage.setItem('admin_authenticated', 'true');
+                    sessionStorage.setItem('admin_token', data.token);
+                    adminAuthModal.classList.remove('active');
+                    showToast('🔓 Admin access granted! Welcome Admin.');
+                    fetchDishes();
+                } else {
+                    adminPassError.textContent = data.message || 'Incorrect Admin Password!';
+                    adminPassError.style.display = 'block';
+                    showToast(data.message || 'Incorrect Admin Password!', true);
+                }
+            } catch (err) {
+                // Fallback check if offline
+                if (password === 'admin@123') {
+                    sessionStorage.setItem('admin_authenticated', 'true');
+                    adminAuthModal.classList.remove('active');
+                    showToast('🔓 Admin access granted!');
+                    fetchDishes();
+                } else {
+                    adminPassError.textContent = 'Incorrect Admin Password!';
+                    adminPassError.style.display = 'block';
+                }
+            }
+        });
+
+        // Lock / Logout Admin
+        if (adminLogoutBtn) {
+            adminLogoutBtn.addEventListener('click', () => {
+                sessionStorage.removeItem('admin_authenticated');
+                sessionStorage.removeItem('admin_token');
+                localStorage.removeItem('admin_token');
+                adminPasswordInput.value = '';
+                adminAuthModal.classList.add('active');
+                showToast('🔒 Admin panel locked.');
+            });
+        }
 
         // Elements
         const dishesGrid = document.getElementById('dishesGrid');
@@ -951,6 +1360,28 @@
             imgPreview.src = url !== '' ? url : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80';
         });
 
+        // Local Photo File Upload Handler
+        const dishFileInput = document.getElementById('dishFileInput');
+        if (dishFileInput) {
+            dishFileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 5 * 1024 * 1024) {
+                        showToast('Image file must be under 5MB.', true);
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const base64Data = event.target.result;
+                        dishImageInput.value = base64Data;
+                        imgPreview.src = base64Data;
+                        showToast('📷 Photo loaded & ready to save to database!');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
         // Search & Filter Listeners
         searchInput.addEventListener('input', renderGrid);
         categoryFilter.addEventListener('change', renderGrid);
@@ -1059,8 +1490,8 @@
             setTimeout(() => toast.remove(), 3500);
         }
 
-        // Init
-        fetchDishes();
+        // Check Auth on Init
+        checkAdminAuth();
     </script>
 </body>
 

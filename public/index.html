@@ -41,11 +41,17 @@
                     <span class="brand-badge">SQLITE POWERED</span>
                 </div>
             </div>
-            <div class="db-status-badge" id="dbStatusBadge">
-                <span class="status-dot online"></span>
-                <span class="status-text">SQLite Active</span>
-                <span class="user-count-chip" id="userCountChip"><i class="fa-solid fa-users"></i> <span
-                        id="userCount">0</span> Registered</span>
+            <div class="nav-right-actions">
+                <a href="admin/admin.html" class="btn-admin-nav">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Admin Portal</span>
+                </a>
+                <div class="db-status-badge" id="dbStatusBadge">
+                    <span class="status-dot online"></span>
+                    <span class="status-text">SQLite Active</span>
+                    <span class="user-count-chip" id="userCountChip"><i class="fa-solid fa-users"></i> <span
+                            id="userCount">0</span> Registered</span>
+                </div>
             </div>
         </header>
 
@@ -143,6 +149,11 @@
                                 <span class="btn-text">Sign In</span>
                                 <span class="btn-spinner hidden"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
                             </button>
+
+                            <a href="admin/admin.html" class="btn-admin-portal">
+                                <i class="fa-solid fa-user-shield"></i>
+                                <span>Admin Login</span>
+                            </a>
 
                             <div class="divider">
                                 <span>OR CONTINUE WITH</span>

@@ -65,6 +65,20 @@ const initDB = async () => {
         );
     `;
 
+    const createOrdersTableSQL = `
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_name TEXT NOT NULL,
+            user_email TEXT,
+            items TEXT NOT NULL,
+            total_amount REAL NOT NULL,
+            payment_method TEXT NOT NULL,
+            payment_status TEXT NOT NULL,
+            order_status TEXT DEFAULT 'Preparing',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    `;
+
     try {
         await dbRun(createUsersTableSQL);
         // Ensure phone column exists for existing tables
@@ -77,6 +91,9 @@ const initDB = async () => {
 
         await dbRun(createDishesTableSQL);
         console.log('✅ SQLite `dishes` table initialized successfully.');
+
+        await dbRun(createOrdersTableSQL);
+        console.log('✅ SQLite `orders` table initialized successfully.');
 
         // Seed initial dishes if empty
         const count = await dbGet('SELECT COUNT(*) as count FROM dishes');
